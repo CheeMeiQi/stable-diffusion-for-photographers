@@ -33,3 +33,6 @@ backend/auth_token.py
 backend/images/
 node_modules/
 
+# pycache
+**/__pycache__/
+
