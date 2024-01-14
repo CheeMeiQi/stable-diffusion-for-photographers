@@ -31,4 +31,5 @@ backend/auth_token.py
 
 # misc
 backend/images/
+node_modules/
 
