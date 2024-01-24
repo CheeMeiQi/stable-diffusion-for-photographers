@@ -6,6 +6,5 @@ class _PromptBase(_pydantic.BaseModel):
     num_inference_steps: int = 10
     guidance_scale: float = 7.5
 
-
 class ImageCreate(_PromptBase):
     prompt: str

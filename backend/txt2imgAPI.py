@@ -8,7 +8,6 @@ import imagePrompt as _imagePrompt
 
 
 # pipeline
-device = "cuda"
 # model_id = "CompVis/stable-diffusion-v1-4"
 # pipe = StableDiffusionPipeline.from_pretrained(model_id, 
 #                                                revision="fp16", 
@@ -21,18 +20,8 @@ pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float
 
 
 # device
-if torch.backends.mps.is_available():
-    device = "mps"
-else:
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-
+device = "cuda"
 pipe.to(device)
-
-# class formValues():
-#     prompt: str
-#     seed: int = 42
-#     num_inference_steps: int = 10
-#     guidance_scale: float = 7.5
 
 async def generate_image(imgPrompt: _imagePrompt.ImageCreate) -> Image: 
     generator = (
@@ -42,7 +31,7 @@ async def generate_image(imgPrompt: _imagePrompt.ImageCreate) -> Image:
     )
     with autocast(device): 
         image:Image = pipe(
-            imgPrompt.prompt, 
+            prompt=imgPrompt.prompt, 
             guidance_scale=imgPrompt.guidance_scale, 
             num_inference_steps=imgPrompt.num_inference_steps, 
             generator=generator

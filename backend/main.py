@@ -2,14 +2,12 @@ from fastapi import FastAPI
 from fastapi.responses import StreamingResponse, Response
 import fastapi as _fapi
 from fastapi.middleware.cors import CORSMiddleware
+from io import BytesIO
 
 import imagePrompt as _imagePrompt
 import txt2imgAPI as _txt2imgAPI
-from io import BytesIO
-# import base64
 
 app = FastAPI()
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Add the origin of your React app
@@ -17,10 +15,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# @app.get("/")
-# def read_root():
-#     return {"message": "Welcome to Stable Diffusion for Photographers"}
 
 @app.post("/api/generate/")
 async def generate_image(imgPromptCreate: _imagePrompt.ImageCreate = _fapi.Depends()):

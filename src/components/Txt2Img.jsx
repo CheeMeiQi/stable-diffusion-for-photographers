@@ -20,52 +20,72 @@ import {
   
   const Txt2Img = () => {
   
-    const [image, updateImage] = useState(null);
-    const [prompt, updatePrompt] = useState("");
-    const [loadingImage, updateLoadingImage] = useState(false);
-    const [seed, updateSeed] = useState(42);
-    const [guidanceScale, updateGuidanceScale] = useState(7.5);
-    const [numInfSteps, updateNumInfSteps] = useState(10);
-    const [errorMessage, updateErrorMessage] = useState("");
-    const [promptImage, updatePromptImage] = useState(null);
+    const [image, setImage] = useState(null);
+    const [prompt, setPrompt] = useState("");
+    const [loadingImage, setLoadingImage] = useState(false);
+    const [seed, setSeed] = useState(42);
+    const [guidanceScale, setGuidanceScale] = useState(7.5);
+    const [numInfSteps, setNumInfSteps] = useState(10);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [promptImage, setPromptImage] = useState(null);
   
     const cleanFormData = () => {
-      updatePrompt("");
-      updateSeed(42);
-      updateGuidanceScale(7.5);
-      updateNumInfSteps(5);
-      updateLoadingImage(false);
-      updateErrorMessage("");
+      setPrompt("");
+      setSeed(42);
+      setGuidanceScale(7.5);
+      setNumInfSteps(10);
+      setLoadingImage(false);
+      setErrorMessage("");
     }
+
+    const updateErrorMessage = (message) => {
+        // Convert the object to a string or extract relevant information
+        const errorMessageString = typeof message === 'object' ? JSON.stringify(message) : message;
+        setErrorMessage(errorMessageString);
+      };
   
-    const generateImage = async (e) => {
+    const handleGenerateImage = async (e) => {
   
       const requestOptions = {
-        method: "GET", 
+        method: "POST", 
         headers: {"Content-Type": "application/json"}, 
-        
-    };
-  
-      updateLoadingImage(true);
-  
-      const response = await fetch(`http://localhost:8000/api/generate/?prompt=${prompt}&num_inference_steps=${numInfSteps}&guidance_scale=${guidanceScale}&seed=${seed}`, requestOptions);
+        body: JSON.stringify({
+            num_inference_steps: numInfSteps,
+            guidance_scale: guidanceScale,
+            seed: seed,
+            prompt: prompt,
+        }),   
+      };
       
-      if (!response.ok){
-          updateErrorMessage("Ooops! Something went wrong generating the image");
-      } else {
+  
+      setLoadingImage(true);
+  
+      const response = await fetch("http://localhost:8000/api/generate/", requestOptions);
+      
+    //   if (!response.ok){
+    //     //   setErrorMessage("Ooops! Something went wrong generating the image");
+    //   } 
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const errorJson = await response.json();
+          // Use the updateErrorMessage function to display the error message
+          updateErrorMessage(errorJson.detail);
+          console.log(prompt)
+        }
+        else {
           const imageBlob = await response.blob();
           const imageObjectURL = URL.createObjectURL(imageBlob);
-          updateImage(imageObjectURL);
-          updatePromptImage(prompt);
+          setImage(imageObjectURL);
+          setPromptImage(prompt);
           cleanFormData();
       }
     }
   
-    const submit = (e) => {
+    const handleSubmit = (e) => {
       e.preventDefault();
-      updateImage(null);
-      updatePromptImage(null);
-      generateImage();
+      setImage(null);
+      setPromptImage(null);
+      handleGenerateImage();
     }
   
     return (
@@ -78,7 +98,7 @@ import {
             <Grid templateColumns="repeat(2, 1fr)" gap={50} p={6} className="page-container">
                 {/* Left Column */}
                 <GridItem colSpan={1} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4}>
-                    <form onSubmit={submit}>
+                    <form onSubmit={handleSubmit}>
                         <div className="field">
                             <label className="label">Prompt</label>
                             <ExpandableText fullText="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
@@ -86,7 +106,7 @@ import {
                                 placeholder="Enter prompt to generate image e.g., a cute dog"
                                 sx={{ '&::placeholder': { lineHeight: "80px" } }}
                                 value={prompt}
-                                onChange={(e) => updatePrompt(e.target.value)}
+                                onChange={(e) => setPrompt(e.target.value)}
                                 height="110px"
                                 resize="vertical" 
                                 required
@@ -102,7 +122,7 @@ import {
                                 type="number"
                                 placeholder="Enter seed number e.g., 42"
                                 value={seed}
-                                onChange={(e) => updateSeed(e.target.value)}
+                                onChange={(e) => setSeed(e.target.value)}
                             ></Input>
                         </div>
 
@@ -115,7 +135,7 @@ import {
                                 type="number" 
                                 placeholder="Enter guidance scale e.g., 7.5" 
                                 value={guidanceScale} 
-                                onChange={(e) =>updateGuidanceScale(e.target.value)}
+                                onChange={(e) =>setGuidanceScale(e.target.value)}
                             ></Input> 
                         </div>
 
@@ -124,11 +144,11 @@ import {
                         <div className="field">
                             <label className="label">Number of Inference Steps</label>
                             <ExpandableText fullText="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
-                            <Input 
+                            <Input
                                 type="number" 
                                 placeholder="Enter number of inference steps e.g., 10" 
                                 value={numInfSteps} 
-                                onChange={(e) =>updateNumInfSteps(e.target.value)}
+                                onChange={(e) =>setNumInfSteps(e.target.value)}
                             ></Input> 
                         </div>
                 
