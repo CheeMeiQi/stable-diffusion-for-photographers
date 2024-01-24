@@ -19,6 +19,7 @@ device = "cuda"
 model_id = "runwayml/stable-diffusion-v1-5"
 pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
 
+
 # device
 if torch.backends.mps.is_available():
     device = "mps"
