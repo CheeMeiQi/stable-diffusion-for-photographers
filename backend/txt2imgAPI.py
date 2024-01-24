@@ -18,16 +18,15 @@ device = "cuda"
 
 model_id = "runwayml/stable-diffusion-v1-5"
 pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
-pipe = pipe.to("cuda")
 
 
-# # device
-# if torch.backends.mps.is_available():
-#     device = "mps"
-# else:
-#     device = "cuda" if torch.cuda.is_available() else "cpu"
+# device
+if torch.backends.mps.is_available():
+    device = "mps"
+else:
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
-# pipe.to(device)
+pipe.to(device)
 
 # class formValues():
 #     prompt: str
