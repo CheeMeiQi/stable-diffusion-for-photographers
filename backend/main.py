@@ -4,7 +4,7 @@ import fastapi as _fapi
 from fastapi.middleware.cors import CORSMiddleware
 
 import imagePrompt as _imagePrompt
-import api as _api
+import txt2imgAPI as _txt2imgAPI
 from io import BytesIO
 # import base64
 
@@ -22,10 +22,10 @@ app.add_middleware(
 # def read_root():
 #     return {"message": "Welcome to Stable Diffusion for Photographers"}
 
-@app.get("/api/generate/")
+@app.post("/api/generate/")
 async def generate_image(imgPromptCreate: _imagePrompt.ImageCreate = _fapi.Depends()):
     
-    image = await _api.generate_image(imgPrompt=imgPromptCreate)
+    image = await _txt2imgAPI.generate_image(imgPrompt=imgPromptCreate)
 
     image.save("./images/testimage.png")
     buffer = BytesIO()
@@ -35,7 +35,10 @@ async def generate_image(imgPromptCreate: _imagePrompt.ImageCreate = _fapi.Depen
     
     return StreamingResponse(buffer, media_type="image/png")
 
-# Endpoint to test the Front-end and backend
-@app.get("/api/training")
+@app.post("/api/training")
 async def train_model():
-    return {"message": "Welcome to the training of Stable Diffusion models"}
+
+    # respnse_json = 
+    
+    # return response_json
+    return "Testing"

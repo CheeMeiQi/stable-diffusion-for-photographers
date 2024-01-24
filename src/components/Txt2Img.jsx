@@ -133,7 +133,7 @@ import {
                         </div>
                 
                         <ErrorMessage message={errorMessage}/>
-                        <Button className="generateButton" type="submit" colorScheme={"orange"}>Generate</Button>
+                        <Button className="generateButton" colorScheme="orange" type="submit">Generate</Button>
                     </form>
                 </GridItem>
 

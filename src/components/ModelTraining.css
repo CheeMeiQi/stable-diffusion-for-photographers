@@ -1,0 +1,19 @@
+
+.file-path {
+    display: inline-block;
+    /* justify-content: left; */
+}
+
+.label {
+    margin-left: "0" !important;
+}
+
+.uploadButton {
+    font-size: 18px;
+    font-weight: 400 !important;
+}
+
+.trainButton {
+    font-size: 18px;
+    font-weight: 400 !important;
+}
