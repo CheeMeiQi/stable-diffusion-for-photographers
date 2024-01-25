@@ -22,7 +22,7 @@ app.add_middleware(
 # def read_root():
 #     return {"message": "Welcome to Stable Diffusion for Photographers"}
 
-@app.post("/api/generate/")
+@app.get("/api/generate/")
 async def generate_image(imgPromptCreate: _imagePrompt.ImageCreate = _fapi.Depends()):
     
     image = await _txt2imgAPI.generate_image(imgPrompt=imgPromptCreate)
@@ -35,7 +35,7 @@ async def generate_image(imgPromptCreate: _imagePrompt.ImageCreate = _fapi.Depen
     
     return StreamingResponse(buffer, media_type="image/png")
 
-@app.post("/api/training")
+@app.get("/api/training")
 async def train_model():
 
     # respnse_json = 
