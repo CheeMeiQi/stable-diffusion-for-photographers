@@ -29,7 +29,7 @@ async def generate_image(request: _imagePrompt.ImageCreate):
     
     return StreamingResponse(buffer, media_type="image/png")
 
-@app.post("/api/training")
+@app.get("/api/training")
 async def train_model():
 
     # respnse_json = 
