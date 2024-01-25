@@ -17,11 +17,11 @@ app.add_middleware(
 )
 
 @app.post("/api/generate/")
-async def generate_image(imgPromptCreate: _imagePrompt.ImageCreate = _fapi.Depends()):
+async def generate_image(request: _imagePrompt.ImageCreate):
     
-    image = await _txt2imgAPI.generate_image(imgPrompt=imgPromptCreate)
-
-    image.save("./images/testimage.png")
+    image = await _txt2imgAPI.generate_image(imgPrompt=request)
+    file_name = f"{request.prompt}_seed_{request.seed}_guidance_{request.guidance_scale}_steps_{request.num_inference_steps}.png"
+    image.save(f"./images/{file_name}")
     buffer = BytesIO()
     image.save(buffer, format="PNG")
     buffer.seek(0)
