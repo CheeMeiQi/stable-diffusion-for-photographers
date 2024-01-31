@@ -87,6 +87,12 @@ import {
       setPromptImage(null);
       handleGenerateImage();
     }
+
+    
+    const handleAutofill = () => {
+        const autofillText = ', black-and-white photography, Ansel Adams style';
+        setPrompt(prevValue => prevValue + autofillText);
+    };
   
     return (
         <ChakraProvider>
@@ -111,6 +117,11 @@ import {
                                 resize="vertical" 
                                 required
                             ></Textarea>
+                        </div>
+                            {/* Button to trigger autofill */}
+                            <Button onClick={handleAutofill}>Ansel Adams</Button>
+                        <div>
+
                         </div>
 
                         <br></br>
