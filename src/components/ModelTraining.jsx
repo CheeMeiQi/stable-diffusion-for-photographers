@@ -14,13 +14,18 @@ import {
     CircularProgress,
     List, 
     ListItem,
+    Select,
   } from "@chakra-ui/react";
   import './ModelTraining.css';
 
 const ModelTraining = () => {
 
-    const [filePath, updatefilePath] = useState("");
-    const [modelName, updateModelName] = useState("");
+    const [filePath, updateFilePath] = useState("");
+    const [userModelName, updateUserModelName] = useState("");
+    const [imageFormat, updateImageFormat] = useState("");
+    const [prompt, updatePrompt] = useState("");
+    const [instancePrompt, updateInstancePrompt] = useState("");
+    const [classPrompt, updateClassPrompt] = useState("");
     // const [loadingImage, updateLoadingImage] = useState(false);
     // const [seed, updateSeed] = useState(42);
     // const [guidanceScale, updateGuidanceScale] = useState(7.5);
@@ -75,7 +80,15 @@ const ModelTraining = () => {
                 <ListItem>a. Crop your images to 512px by 512px 
                           with the main subject in the center of the images.
                 </ListItem>
-                <ListItem>b. Save all 10 images into a folder in your local work station.</ListItem>
+                <div>
+                    <label className="label">Select your Images Format</label>
+                    <Select placeholder="Select option" onChange={(e) => updateImageFormat(e.target.value)}>
+                        <option value={imageFormat}>jpg</option>
+                        <option value={imageFormat}>png</option>
+                        <option value={imageFormat}>webp</option>
+                    </Select>
+                </div>
+                <ListItem>b. Rename all 10 images from 1 to 10. (E.g. "1.jpg", "2.jpg", etc.) Save all 10 images into a folder in your local work station.</ListItem>
                 <ListItem>c. Copy the file path of this folder and paste below.</ListItem>
             </List>
             <div className="file-path">
@@ -84,7 +97,7 @@ const ModelTraining = () => {
                     type="text"
                     placeholder="Enter the file path of your folder"
                     value={filePath}
-                    onChange={(e) => updatefilePath(e.target.value)}
+                    onChange={(e) => updateFilePath(e.target.value)}
                     height="50px"
                     width="500px"
                     marginLeft="10px"
@@ -102,8 +115,8 @@ const ModelTraining = () => {
                     <Input
                         type="text"
                         placeholder="Enter how you want to name your model"
-                        value={modelName}
-                        onChange={(e) => updateModelName(e.target.value)}
+                        value={userModelName}
+                        onChange={(e) => updateUserModelName(e.target.value)}
                         height="50px"
                         width="500px"
                         marginLeft="10px"
@@ -118,8 +131,8 @@ const ModelTraining = () => {
                     <label className="label">Instance Prompt</label>
                     <Textarea
                         placeholder="Enter a prompt that best describes the example images"
-                        value={modelName}
-                        onChange={(e) => updateModelName(e.target.value)}
+                        value={instancePrompt}
+                        onChange={(e) => updateInstancePrompt(e.target.value)}
                         height="50px"
                         width="500px"
                         marginLeft="10px"
@@ -128,13 +141,13 @@ const ModelTraining = () => {
                 </div>
 
                 <br></br>
-
+                {/* KIV */}
                 <div>
                     <label className="label">Class Prompt</label>
                     <Textarea
                         placeholder="Enter a prompt that makes the training more like specific style e.g., landscape, seascape"
-                        value={modelName}
-                        onChange={(e) => updateModelName(e.target.value)}
+                        value={classPrompt}
+                        onChange={(e) => updateClassPrompt(e.target.value)}
                         height="50px"
                         width="500px"
                         marginLeft="10px"
@@ -172,8 +185,8 @@ const ModelTraining = () => {
                     <Input
                         type="text"
                         placeholder="Enter model ID/ model name"
-                        value={modelName}
-                        onChange={(e) => updateModelName(e.target.value)}
+                        value={userModelName}
+                        onChange={(e) => updateUserModelName(e.target.value)}
                         height="50px"
                         width="500px"
                         marginLeft="10px"
