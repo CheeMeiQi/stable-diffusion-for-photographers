@@ -4,149 +4,178 @@ import json
 from PIL import Image
 from io import BytesIO
 from datetime import datetime
+from colorama import init, Fore, Back, Style
 
-# 1.1. Get image upoad URL
+# 1. Get image upload URL and upload the images (10x)
+def getAndUploadImage(folderPath, imageFormat):
 
-# url = "https://api.novita.ai/v3/assets/training_dataset"
+    assetIDs = []
+    for i in range(1, 11, 1):
+        # 1.1. Get image upoad URL
+        url = "https://api.novita.ai/v3/assets/training_dataset"
+        payload = {"file_extension": f"{imageFormat}"}
+        headers = {
+        'Authorization': 'Bearer ' + loraAPIkey_novita,
+        'Content-Type': 'application/json'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        print(Fore.GREEN + f"SUCCESS: UPLOAD-IMAGE-URL {i} RESPONSE:\n " + response.text)
+        if response.status_code == 200:
+            image_url_response = response.json()
+            upload_url = image_url_response["upload_url"]
+            assetIDs.append(image_url_response["assets_id"])
+        else:
+            print(Fore.RED + f"ERROR: UPLOAD-IMAGE-URL {i}:\n" + response.text)
 
-# payload = "{\"file_extension\": \"jpeg\"}"
+        # 1.2. Upload images
+        # filePath = r"C:\Users\Mei Qi\Desktop\SampleMBSImages\10.jpg"
+        filePath = folderPath + f"{i}.{imageFormat}"
+        # Open the file in binary mode and send a PUT request with the file content
+        with open(filePath, 'rb') as file:
+            response = requests.put(upload_url, data=file)
 
-# headers = {
-#   'Authorization': 'Bearer ' + loraAPIkey_novita,
-#   'Content-Type': 'application/json'
-# }
+        if response.ok:
+            print(Fore.GREEN + f"SUCCESS: UPLOAD-IMAGE {i} RESPONSE:\n ", response.text)
+        else:
+            print(Fore.RED + f"ERROR: UPLOAD-IMAGE {i}:\n ", response.text)
 
-# response = requests.request("POST", url, headers=headers, data=payload)
-
-# print(response.text)
-
-# 1.2. Upload images
-
-# filepath = r"C:\Users\Mei Qi\Desktop\SampleMBSImages\10.jpg"
-# upload_url = ""
-
-# # Open the file in binary mode and send a PUT request with the file content
-# with open(filepath, 'rb') as file:
-#     response = requests.put(upload_url, data=file)
-
-# # Check the response status
-# if response.ok:
-#     print("File uploaded successfully: ", response.text)
-# else:
-#     print("Error occurred: ", response.text)
+        return assetIDs
 
 
 # 2.1. Start training task and configure parameters
+def trainLora(userModelName, assestIDs, imageCaptions, instancePrompt, classPrompt):
 
+    url = "https://api.novita.ai/v3/training/subject"
 
-# url = "https://api.novita.ai/v3/training/subject"
+    payload = json.dumps({
+    "name": userModelName,
+    #TODO: change to see which model is better
+    "base_model": "realisticVisionV51_v51VAE_94301", 
+    "width": 512,
+    "height": 512,
+    "image_dataset_items": [
+            {
+                "assets_id": assestIDs[0],
+                "caption": imageCaptions[0]
 
-# payload = json.dumps({
-#   "name": "MBS_01",
-#   "base_model": "realisticVisionV51_v51VAE_94301",
-#   "width": 512,
-#   "height": 512,
-#   "image_dataset_items": [
-#         {
-#             "assets_id": "40388e4686d4ea00b1359bc6618a4ea2",
-#             "caption": "Marina Bay Sands (MBS) Singapore at night with Shoppes in front of it"
+            },
+            {
+                "assets_id": assestIDs[1],
+                "caption": imageCaptions[1]
+            },
+            {
+                "assets_id": assestIDs[2],
+                "caption": imageCaptions[2]
+            },
+            {
+                "assets_id": assestIDs[3],
+                "caption": imageCaptions[3]
+            },
+            {
+                "assets_id": assestIDs[4],
+                "caption": imageCaptions[4]
+            },
+            {
+                "assets_id": assestIDs[5],
+                "caption": imageCaptions[5]
+            },
+            {
+                "assets_id": assestIDs[6],
+                "caption": imageCaptions[6]
+            },
+            {
+                "assets_id": assestIDs[7],
+                "caption": imageCaptions[7]
+            },
+            {
+                "assets_id": assestIDs[8],
+                "caption": imageCaptions[8]
+            },
+            {
+                "assets_id": assestIDs[9],
+                "caption": imageCaptions[9]
+            },
+        ],
+    "expert_setting": {
+        "train_batch_size": 2,
+        "learning_rate": 0.0001,
+        "max_train_steps": 500,
+        "seed": 2023,
+        "lr_scheduler": "constant",
+        "lr_warmup_steps": None,
+        # "instance_prompt": "beautiful skyline of Marina Bay Sands at night in Singapore, photorealistic, sharp-focus, highly detailed, 8K",
+        "instance_prompt": instancePrompt,
+        # TODO: check if can put any other class prompt with style training
+        "class_prompt": "person",
+        "with_prior_preservation": True,
+        "prior_loss_weight": None,
+        "train_text_encoder": False,
+        "lora_r": None,
+        "lora_alpha": None,
+        "lora_text_encoder_r": None,
+        "lora_text_encoder_alpha": None
+    },
+    "components": [
+        {
+        "name": "resize",
+        "args": [
+            {
+            "name": "width",
+            "value": "512"
+            },
+            {
+            "name": "height",
+            "value": "512"
+            }
+        ]
+        }
+    ]
+    })
+    headers = {
+    'Accept': 'application/json',
+    'Authorization': 'Bearer ' + loraAPIkey_novita,
+    'Content-Type': 'application/json'
+    }
 
-#         },
-#         {
-#             "assets_id": "651bbe00a3fcb8793302e40b5caba4f4",
-#             "caption": "Marina Bay Sands (MBS) Singapore at night with Shoppes and Art Science Museum on the right"
-#         },
-#         {
-#             "assets_id": "cc1ff61753c91f735bc7610d920d71f3",
-#             "caption": "Marina Bay Sands (MBS) Singapore at night with Shoppes and Art Science Museum in front of MBS"
-#         },
-#         {
-#             "assets_id": "82c9fdacbb457e7515ed0e25454f99c7",
-#             "caption": "Marina Bay Sands (MBS) Singapore during the day"
-#         },
-#         {
-#             "assets_id": "d700b80dd31d86460bd81807e10680a9",
-#             "caption": "Marina Bay Sands (MBS) Singapore at night with Shoppes in front of it and Art Science Museum on the left "
-#         },
-#         {
-#             "assets_id": "ee36ba0d045b1e9b79c506396baa8f42",
-#             "caption": "Marina Bay Sands (MBS) Singapore during evening wiht Shoppes in front of it"
-#         },
-#         {
-#             "assets_id": "902cac2e72a33b98b9bf9d6b286311f2",
-#             "caption": "MBS Singapore during evening with Shoppes and Art Science Museum"
-#         },
-#         {
-#             "assets_id": "4aff63dd7ce1e1970a64bbe7e0017cc5",
-#             "caption": "MBS at night with Helix Bridge on the left and Shoppes in front of MBS"
-#         },
-#         {
-#             "assets_id": "6ec6d5663c16c88cc17757f76a6ebfc5",
-#             "caption": "MBS during the day wit Shoppes in front of it"
-#         },
-#         {
-#             "assets_id": "acb16f58b232e94b15b439da5bd440b8",
-#             "caption": "MBS Singapore during the dat with Shoppes and Art Science Museum in front of it"
-#         }
-#     ],
-#   "expert_setting": {
-#     "train_batch_size": 2,
-#     "learning_rate": 0.0001,
-#     "max_train_steps": 500,
-#     "seed": 2023,
-#     "lr_scheduler": "constant",
-#     "lr_warmup_steps": None,
-#     "instance_prompt": "beautiful skyline of Marina Bay Sands at night in Singapore, photorealistic, sharp-focus, highly detailed, 8K",
-#     "class_prompt": "person",
-#     "with_prior_preservation": True,
-#     "prior_loss_weight": None,
-#     "train_text_encoder": False,
-#     "lora_r": None,
-#     "lora_alpha": None,
-#     "lora_text_encoder_r": None,
-#     "lora_text_encoder_alpha": None
-#   },
-#   "components": [
-#     {
-#       "name": "resize",
-#       "args": [
-#         {
-#           "name": "width",
-#           "value": "512"
-#         },
-#         {
-#           "name": "height",
-#           "value": "512"
-#         }
-#       ]
-#     }
-#   ]
-# })
-# headers = {
-#   'Accept': 'application/json',
-#   'Authorization': 'Bearer ' + loraAPIkey_novita,
-#   'Content-Type': 'application/json'
-# }
+    response = requests.request("POST", url, headers=headers, data=payload)
 
-# response = requests.request("POST", url, headers=headers, data=payload)
+    if response.status_code == 200:
+            training_response = response.json()
+            task_id = training_response["task_id"]
+            print(Fore.GREEN + f"SUCCESS: TRAINING-LORA:\n" + response.text)
+    else:
+        print(Fore.RED + f"ERROR: UPLOAD-IMAGE-URL:\n" + response.text)
 
-# print(response.text)
+    return task_id
 
 
 # 3.1. Get model training and deployment status
+def  getModelStatus(taskID):
 
-# url = "https://api.novita.ai/v3/training/subject?task_id=4a086be5-0316-430d-953d-d92a3cfb843f"
+    url = f"https://api.novita.ai/v3/training/subject?task_id={taskID}"
 
-# payload = {}
-# headers = {
-#   'Authorization': 'Bearer ' + loraAPIkey_novita
-# }
+    payload = {}
+    headers = {
+      'Authorization': 'Bearer ' + loraAPIkey_novita
+    }
 
-# response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.request("GET", url, headers=headers, data=payload)
 
-# print(response.text)
+    if response.status_code == 200:
+            modelStatus_response = response.json()
+            task_status = modelStatus_response["task_status"]
+            if task_status == "SUCCESS":
+                print(Fore.GREEN + f"SUCCESS: TRAINING-LORA:\n" + response.text)
+                model_name = modelStatus_response["models"]["model_name"]
+            else:
+                print(Fore.RED + f"TRAINING-STATUS:\n" + task_status)         
+    else:
+        print(Fore.RED + f"ERROR: TRAINING-LORA:\n" + response.text)
 
-# 4.1 Get lora name
+    return model_name
+
+
+#4.1 Get lora name
 
 # url = "https://api.novita.ai/v3/model"
 
@@ -157,37 +186,42 @@ from datetime import datetime
 
 # }
 # headers = {
-#   'Authorization': 'Bearer ' + loraAPIkey_novita
+#     'Authorization': 'Bearer ' + loraAPIkey_novita
 # }
 
 # response = requests.request("GET", url, headers=headers, params=params)
 
 # print(response.text)
 
+
+# dictionary to match userModelName (i.e. task_name) to model_name
+
 # 4.2. Start using the trained model
+def generateImagewithTrainedLora(userModelName, prompt, negativePrompt):
 
-# url = "http://api.novita.ai/v2/txt2img"
+    # seach model_name in dictionary
+    url = "http://api.novita.ai/v2/txt2img"
 
-# payload = {
-#   "model_name": "realisticVisionV51_v51VAE_94301.safetensors",
-#   "prompt": "beautiful skyline of Marina Bay Sands with only 3 towers at night <lora:model_1707235694_3ED9146D7A:1>",
-#   "negative_prompt": "more than 3 towers, fewer than 3 towers, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, out of focus",
-#   "batch_size": 1,
-#   "width": 512,
-#   "height": 512,
-#   "sampler_name": "DPM++ 2M Karras",
-#   "cfg_scale": 7,
-#   "steps": 30
-# }
+    payload = {
+      "model_name": "realisticVisionV51_v51VAE_94301.safetensors",
+      "prompt": prompt + f"<lora:{model_name}:1>",
+      "negative_prompt": negativePrompt,
+      "batch_size": 1,
+      "width": 512,
+      "height": 512,
+      "sampler_name": "DPM++ 2M Karras",
+      "cfg_scale": 7,
+      "steps": 30
+    }
 
-# headers = {
-#   'Content-Type': 'application/json',
-#   'Authorization': 'Bearer ' + loraAPIkey_novita
-# }
+    headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + loraAPIkey_novita
+    }
 
-# response = requests.post(url, headers=headers, data=json.dumps(payload))
+    response = requests.post(url, headers=headers, data=json.dumps(payload))
 
-# print(response.text)
+    print(response.text)
 
 # 4.3. Get image
 
