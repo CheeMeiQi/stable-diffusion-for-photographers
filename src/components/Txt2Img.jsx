@@ -16,6 +16,11 @@ import {
   import './Txt2Img.css';
   import ErrorMessage from "./ErrorMessage";
   import ExpandableText from "./ExpandableText";
+import PhotographersDropdown from "./PhotographersDropdown";
+import ArtistsDropdown from "./ArtistsDropdown";
+import TabItems from "./TabItems";
+import EffectsDropdown from "./EffectsDropdown";
+import CompositionsDropdown from "./CompositionsDropdown";
   
   
   const Txt2Img = () => {
@@ -88,21 +93,22 @@ import {
       handleGenerateImage();
     }
 
-    
-    const handleAutofill = () => {
-        const autofillText = ', black-and-white photography, Ansel Adams style';
-        setPrompt(prevValue => prevValue + autofillText);
-    };
   
     return (
         <ChakraProvider>
             <Heading className="heading">Text-to-Image Generation</Heading>
             <Text marginBottom={"10px"} fontSize={"18px"}>
             This application uses the model trained by Stability AI. The model can be found in this {" "}
-                <Link href={"https://github.com/CompVis/stable-diffusion"} color={"blue"}> Github Repo.</Link>
+                <Link href={"https://github.com/runwayml/stable-diffusion"} color={"blue"}> Github Repo.</Link>
             </Text>
-            <Grid templateColumns="repeat(2, 1fr)" gap={50} p={6} className="page-container">
+            <Grid templateColumns="repeat(2, 1fr)" gap={5} p={6} className="page-container">
+
                 {/* Left Column */}
+                <GridItem colSpan={1} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4}>
+                    <TabItems />
+                </GridItem>
+
+                {/* Right Column */}
                 <GridItem colSpan={1} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4}>
                     <form onSubmit={handleSubmit}>
                         <div className="field">
@@ -118,10 +124,37 @@ import {
                                 required
                             ></Textarea>
                         </div>
-                            {/* Button to trigger autofill */}
-                            <Button onClick={handleAutofill}>Ansel Adams</Button>
-                        <div>
 
+                        <br></br>
+
+                        <div className="field">
+                            <label className="label">Select a photographer style</label>
+                            {/* Button to trigger autofill */}
+                            <PhotographersDropdown setPrompt={setPrompt}/>
+                        </div>
+
+                        <br></br>
+
+                        <div className="field">
+                            <label className="label">Select an artist style</label>
+                            {/* Button to trigger autofill */}
+                            <ArtistsDropdown setPrompt={setPrompt}/>
+                        </div>
+
+                        <br></br>
+
+                        <div className="field">
+                            <label className="label">Select an effect</label>
+                            {/* Button to trigger autofill */}
+                            <EffectsDropdown setPrompt={setPrompt}/>
+                        </div>
+
+                        <br></br>
+
+                        <div className="field">
+                            <label className="label">Select a composition</label>
+                            {/* Button to trigger autofill */}
+                            <CompositionsDropdown setPrompt={setPrompt}/>
                         </div>
 
                         <br></br>
@@ -168,26 +201,26 @@ import {
                     </form>
                 </GridItem>
 
-                {/* Right Column */}
-                <GridItem colSpan={1} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4}>
+                <GridItem colSpan={2} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4} height="500px">
+                    <label className="label">Output</label>
                     { image ? ( 
-                        <Flex align="center" justify="center" height="100%" width="100%">
-                            <figure>
-                                <img src={image} alt="genimage" className="genImage"/>
-                                <figcaption style={{ textAlign: "center", marginTop: "5px"}}>{promptImage}</figcaption>
-                            </figure>
-                        </Flex>
-                        ) 
-                            : <></>
-                    }
-                    
-                    { loadingImage ? (
-                            <Flex align="center" justify="center" height="100%" direction="column">
-                                <CircularProgress isIndeterminate color='orange' size="120px"thickness="12px"/>
-                                <Text mt={5}>Please wait while your image is generating...</Text>
+                            <Flex align="center" justify="center" height="100%" width="100%">
+                                <figure>
+                                    <img src={image} alt="genimage" className="genImage"/>
+                                    <figcaption style={{ textAlign: "center", marginTop: "5px"}}>{promptImage}</figcaption>
+                                </figure>
                             </Flex>
-                        ) : <></>
-                    }            
+                            ) 
+                                : <></>
+                        }
+                        
+                        { loadingImage ? (
+                                <Flex align="center" justify="center" height="100%" direction="column">
+                                    <CircularProgress isIndeterminate color='orange' size="120px"thickness="12px"/>
+                                    <Text mt={5}>Please wait while your image is generating...</Text>
+                                </Flex>
+                            ) : <></>
+                        }            
                 </GridItem>
             </Grid>
         </ChakraProvider>

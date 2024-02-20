@@ -8,7 +8,7 @@ import imagePrompt as _imagePrompt
 
 
 # pipeline
-# model_id = "CompVis/stable-diffusion-v1-4"
+#model_id = "CompVis/stable-diffusion-v1-4"
 # pipe = StableDiffusionPipeline.from_pretrained(model_id, 
 #                                                revision="fp16", 
 #                                             #    torch_dtype=torch.float16, 

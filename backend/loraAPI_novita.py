@@ -195,12 +195,18 @@ def  getModelStatus(taskID):
 
 
 # dictionary to match userModelName (i.e. task_name) to model_name
+def getModelName(userModelName):
+     
+     return model_name
 
 # 4.2. Start using the trained model
 def generateImagewithTrainedLora(userModelName, prompt, negativePrompt):
 
     # seach model_name in dictionary
     url = "http://api.novita.ai/v2/txt2img"
+
+    # match userModelName to model_name
+
 
     payload = {
       "model_name": "realisticVisionV51_v51VAE_94301.safetensors",
@@ -224,26 +230,26 @@ def generateImagewithTrainedLora(userModelName, prompt, negativePrompt):
     print(response.text)
 
 # 4.3. Get image
+    
+def getImage(task_id):
+    url = "http://api.novita.ai/v2/progress"
+    params = {'task_id': '5795eb82-30e3-45fe-b379-7dd7897a2840'}
+    headers = {
+    'Authorization': 'Bearer ' + loraAPIkey_novita
+    }
 
-# url = "http://api.novita.ai/v2/progress"
-# params = {'task_id': '5795eb82-30e3-45fe-b379-7dd7897a2840'}
-# headers = {
-#   'Authorization': 'Bearer ' + loraAPIkey_novita
-# }
+    response = requests.get(url, headers=headers, params=params)
 
-# response = requests.get(url, headers=headers, params=params)
-
-# print(response.text)
+    print(response.text)
 
 # 4.4. Open image
-
 # Fetch the image from the URL
-# url = ""
-# response = requests.get(url)
-# image = Image.open(BytesIO(response.content))
+def openImage(image_url): 
+    response = requests.get(image_url)
+    image = Image.open(BytesIO(response.content))
 
-# # Display and save the image
-# image.show()
-# current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-# save_path = f"./images/mbs_{current_datetime}.png"
-# image.save(save_path)
+    # Display and save the image
+    image.show()
+    current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    save_path = f"./images/mbs_{current_datetime}.png"
+    image.save(save_path)
