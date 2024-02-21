@@ -27,6 +27,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
   
     const [image, setImage] = useState(null);
     const [prompt, setPrompt] = useState("");
+    const [automatedPrompt, setAutomatedPrompt] = useState("");
     const [loadingImage, setLoadingImage] = useState(false);
     const [seed, setSeed] = useState(42);
     const [guidanceScale, setGuidanceScale] = useState(7.5);
@@ -36,6 +37,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
   
     const cleanFormData = () => {
       setPrompt("");
+      setAutomatedPrompt("");
       setSeed(42);
       setGuidanceScale(7.5);
       setNumInfSteps(10);
@@ -93,6 +95,13 @@ import CompositionsDropdown from "./CompositionsDropdown";
       handleGenerateImage();
     }
 
+    const [showSection, setShowSection] = useState(false); // State to control visibility
+
+    // Function to toggle the visibility of the section
+    const toggleSection = () => {
+      setShowSection(!showSection);
+    };
+
   
     return (
         <ChakraProvider>
@@ -111,7 +120,57 @@ import CompositionsDropdown from "./CompositionsDropdown";
                 {/* Right Column */}
                 <GridItem colSpan={1} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4}>
                     <form onSubmit={handleSubmit}>
+
+                        <div>
+                            <Text style={{fontSize: "16px"}}> 
+                                <Text as="span" fontWeight="bold" color={"red"}>Refer to the tabs on the left column for example images </Text> of photographer and painting styles, photo effects and compositions. <Text as="span" fontWeight="bold" color="orange">Choose your desired styles/effects/compositions below.</Text> <Text as="span" fontWeight="bold" color="green">Text prompts will be generated automatically</Text> to aid in image generation.
+                            </Text>
+                        </div>
+
                         <div className="field">
+                            <label className="label">Choose a photographer style</label>
+                            {/* Button to trigger autofill */}
+                            <PhotographersDropdown setPrompt={setPrompt}/>
+                        </div>
+
+                        <br></br>
+
+                        <div className="field">
+                            <label className="label">Choose a painting style</label>
+                            {/* Button to trigger autofill */}
+                            <ArtistsDropdown setPrompt={setPrompt}/>
+                        </div>
+
+                        <br></br>
+
+                        <div className="field">
+                            <label className="label">Choose an effect</label>
+                            {/* Button to trigger autofill */}
+                            <EffectsDropdown setPrompt={setPrompt}/>
+                        </div>
+
+                        <br></br>
+
+                        <div className="field">
+                            <label className="label">Choose a composition</label>
+                            {/* Button to trigger autofill */}
+                            <CompositionsDropdown setPrompt={setPrompt}/>
+                        </div>
+
+                        <br></br>
+
+                        <div className="field">
+                            <label className="label">Automated Prompts</label>
+                            <Textarea
+                               value={Prompt}
+                               onChange={(e) => setPrompt(e.target.value)}
+                            ></Textarea>
+                        </div>
+
+                        <br></br>
+
+                        <div className="field">
+                            <Text style={{fontsize:"1px", fontWeight:"bold", color:"green"}}>Feel free to add in your own prompt for more details!</Text>
                             <label className="label">Prompt</label>
                             <ExpandableText fullText="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
                             <Textarea
@@ -127,53 +186,32 @@ import CompositionsDropdown from "./CompositionsDropdown";
 
                         <br></br>
 
-                        <div className="field">
-                            <label className="label">Select a photographer style</label>
-                            {/* Button to trigger autofill */}
-                            <PhotographersDropdown setPrompt={setPrompt}/>
+                        <div>
+                            <button onClick={toggleSection} style={{
+                                fontSize:"20px",
+                                fontWeight:"bold"
+                            }}>
+                                {showSection ? 'Hide Advanced Options' : 'Show Advanced Options'}
+                            </button>
+                            {showSection && (
+                                <div>
+                                {/* Your section content goes here */}
+                                <div style={{ padding: '10px' }}>
+                                    <div className="field">
+                                    <label className="label">Seed (Default: 42)</label>
+                                    <ExpandableText fullText="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+                                    <Input
+                                        type="number"
+                                        placeholder="Enter seed number e.g., 42"
+                                        value={seed}
+                                        onChange={(e) => setSeed(e.target.value)}
+                                    ></Input>
                         </div>
 
                         <br></br>
 
                         <div className="field">
-                            <label className="label">Select an artist style</label>
-                            {/* Button to trigger autofill */}
-                            <ArtistsDropdown setPrompt={setPrompt}/>
-                        </div>
-
-                        <br></br>
-
-                        <div className="field">
-                            <label className="label">Select an effect</label>
-                            {/* Button to trigger autofill */}
-                            <EffectsDropdown setPrompt={setPrompt}/>
-                        </div>
-
-                        <br></br>
-
-                        <div className="field">
-                            <label className="label">Select a composition</label>
-                            {/* Button to trigger autofill */}
-                            <CompositionsDropdown setPrompt={setPrompt}/>
-                        </div>
-
-                        <br></br>
-
-                        <div className="field">
-                            <label className="label">Seed</label>
-                            <ExpandableText fullText="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
-                            <Input
-                                type="number"
-                                placeholder="Enter seed number e.g., 42"
-                                value={seed}
-                                onChange={(e) => setSeed(e.target.value)}
-                            ></Input>
-                        </div>
-
-                        <br></br>
-
-                        <div className="field">
-                            <label className="label">Guidance Scale</label>
+                            <label className="label">Guidance Scale (Default: 7.5)</label>
                             <ExpandableText fullText="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
                             <Input 
                                 type="number" 
@@ -186,7 +224,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
                         <br></br>
 
                         <div className="field">
-                            <label className="label">Number of Inference Steps</label>
+                            <label className="label">Number of Inference Steps (Default: 10)</label>
                             <ExpandableText fullText="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
                             <Input
                                 type="number" 
@@ -195,6 +233,11 @@ import CompositionsDropdown from "./CompositionsDropdown";
                                 onChange={(e) =>setNumInfSteps(e.target.value)}
                             ></Input> 
                         </div>
+                                </div>
+                                </div>
+                            )}
+                        </div>
+                        
                 
                         <ErrorMessage message={errorMessage}/>
                         <Button className="generateButton" colorScheme="orange" type="submit">Generate</Button>

@@ -12,7 +12,7 @@ const TabItems = () => {
     <Tabs index={tabIndex} onChange={handleTabChange}>
       <TabList>
         <Tab>Photographer Styles</Tab>
-        <Tab>Artist Styles</Tab>
+        <Tab>Painting Styles</Tab>
         <Tab>Effects</Tab>
         <Tab>Compositions</Tab>
       </TabList>
