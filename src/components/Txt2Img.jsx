@@ -27,7 +27,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
   
     const [image, setImage] = useState(null);
     const [prompt, setPrompt] = useState("");
-    const [automatedPrompt, setAutomatedPrompt] = useState("");
+    // const [automatedPrompt, setAutomatedPrompt] = useState("");
     const [loadingImage, setLoadingImage] = useState(false);
     const [seed, setSeed] = useState(42);
     const [guidanceScale, setGuidanceScale] = useState(7.5);
@@ -37,7 +37,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
   
     const cleanFormData = () => {
       setPrompt("");
-      setAutomatedPrompt("");
+    //   setAutomatedPrompt("");
       setSeed(42);
       setGuidanceScale(7.5);
       setNumInfSteps(10);
@@ -162,7 +162,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
                         <div className="field">
                             <label className="label">Automated Prompts</label>
                             <Textarea
-                               value={Prompt}
+                               value={prompt}
                                onChange={(e) => setPrompt(e.target.value)}
                             ></Textarea>
                         </div>
