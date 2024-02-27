@@ -2,28 +2,37 @@
 import React, { useState } from 'react';
 import { Select } from "@chakra-ui/react";
 
-const PhotographersDropdown = ({ setPrompt }) => {
+const PhotographersDropdown = ({ setAutomatedPrompt }) => {
 
-    const options = ['Ansel Adams', 'Steve McCurry', 'Henri Cartier-Bresson', 'Annie Leibovitz', 'Andreas Gursky'];
+    const options = ['Ansel Adams', 'Steve McCurry', 'Henri Cartier-Bresson', 'Annie Leibovitz', 'Andreas Gursky', 'None'];
+    const phrases = [', black-and-white photography, Ansel Adams style', ', Steve McCurry style', ', Henri Cartier-Bresson style', ', Annie Leibovitz style', ', Andreas Gursky style'];
 
   const handleAutofill = (selectedOption) => {
     let autofillText = '';
     if (selectedOption === 'Ansel Adams') {
-        autofillText = ', black-and-white photography, Ansel Adams style';
+        autofillText = phrases[0];
+        setAutomatedPrompt(prevValue => prevValue + autofillText);
     } else if (selectedOption === 'Steve McCurry') {
-        autofillText = ', Steve  McCurry style';
+        autofillText = phrases[1];
+        setAutomatedPrompt(prevValue => prevValue + autofillText);
     } else if (selectedOption === 'Henri Cartier-Bresson') {
-        autofillText = ', Henri Cartier-Bresson style';
+        autofillText = phrases[2];
+        setAutomatedPrompt(prevValue => prevValue + autofillText);
     } else if (selectedOption === 'Annie Leibovitz') {
-        autofillText = ', Annie Leibovitz style';
+        autofillText = phrases[3];
+        setAutomatedPrompt(prevValue => prevValue + autofillText);
     } else if (selectedOption === 'Andreas Gursky') {
-        autofillText = ', Andreas Gursky style';
+        autofillText = phrases[4];
+        setAutomatedPrompt(prevValue => prevValue + autofillText);
+    } else if (selectedOption === 'None') {
+        phrases.forEach(phrase => {
+          setAutomatedPrompt(prevValue => prevValue.replace(new RegExp(phrase, 'g'), ''));
+        });
     }
     else{
         autofillText = ''
     }
-    setPrompt(prevValue => prevValue + autofillText);
-
+    
   };
 
   return (

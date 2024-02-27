@@ -261,7 +261,64 @@ const TabItems = () => {
                       Rule Of Thirds
                 </Box>
             </Box>
+            <Box position="relative">
+                  <Image src="/GoldenTriangles.jpg" alt="GoldenTriangles"/>
+                    <Box
+                      position="absolute"
+                      bottom="4"
+                      right="4"
+                      bg="blackAlpha.700"
+                      color="white"
+                      p="2"
+                      borderRadius="md"
+                    >
+                      Golden Triangles
+                </Box>
+            </Box>
+            <Box position="relative">
+                  <Image src="/GoldenRatio.jpg" alt="GoldenRatio"/>
+                    <Box
+                      position="absolute"
+                      bottom="4"
+                      right="4"
+                      bg="blackAlpha.700"
+                      color="white"
+                      p="2"
+                      borderRadius="md"
+                    >
+                      Golden Ratio
+                </Box>
+            </Box>
+            <Box position="relative">
+                  <Image src="/CenteredCompositionAndSymmetry.jpg" alt="CenteredCompositionAndSymmetry"/>
+                    <Box
+                      position="absolute"
+                      bottom="4"
+                      right="4"
+                      bg="blackAlpha.700"
+                      color="white"
+                      p="2"
+                      borderRadius="md"
+                    >
+                      Centered Composition And Symmetry
+                </Box>
+            </Box>
+            <Box position="relative">
+                  <Image src="/LeaveNegativeSpace.jpg" alt="LeaveNegativeSpace"/>
+                    <Box
+                      position="absolute"
+                      bottom="4"
+                      right="4"
+                      bg="blackAlpha.700"
+                      color="white"
+                      p="2"
+                      borderRadius="md"
+                    >
+                      Leave Negative Space
+                </Box>
+            </Box>
           </Box>
+          
         </TabPanel> 
       </TabPanels>
     </Tabs>

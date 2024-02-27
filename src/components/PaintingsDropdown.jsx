@@ -2,38 +2,36 @@
 import React, { useState } from 'react';
 import { Select } from "@chakra-ui/react";
 
-const EffectsDropdown = ({ setAutomatedPrompt }) => {
+const PaintingsDropdown = ({ setAutomatedPrompt }) => {
 
-    const options = ['Bokeh', 'Kodak', 'Lomo', 'Golden Hour', 'Flash', 'None'];
-    const phrases = [', bokeh effect', ', kodak film effect', ', lomo effect', ', golden hour effect', ', flash effect'];
+    const options = ['Impressionism', 'Pop Art', 'Abstract', 'Renaissance', 'Baroque', 'None'];
+    const phrases = [', impressionist style', ', Pop Art style', ', abstract style', ', renaissance style', ', baroque style'];
 
   const handleAutofill = (selectedOption) => {
     let autofillText = '';
-    if (selectedOption === 'Bokeh') {
+    if (selectedOption === 'Impressionism') {
         autofillText = phrases[0];
         setAutomatedPrompt(prevValue => prevValue + autofillText);
-    } else if (selectedOption === 'Kodak') {
+    } else if (selectedOption === 'Pop Art') {
         autofillText = phrases[1];
         setAutomatedPrompt(prevValue => prevValue + autofillText);
-    } else if (selectedOption === 'Lomo') {
+    } else if (selectedOption === 'Abstract') {
         autofillText = phrases[2];
         setAutomatedPrompt(prevValue => prevValue + autofillText);
-    } else if (selectedOption === 'Golden Hour') {
+    } else if (selectedOption === 'Renaissance') {
         autofillText = phrases[3];
         setAutomatedPrompt(prevValue => prevValue + autofillText);
-    } else if (selectedOption === 'Flash') {
+    } else if (selectedOption === 'Baroque') {
         autofillText = phrases[4];
         setAutomatedPrompt(prevValue => prevValue + autofillText);
-    }
-    else if (selectedOption == 'None'){
+    } else if (selectedOption === 'None'){
         phrases.forEach(phrase => {
-          setAutomatedPrompt(prevValue => prevValue.replace(new RegExp(phrase, 'g'), '')); // 'g' flag for global replace
+          setAutomatedPrompt(prevValue => prevValue.replace(new RegExp(phrase, 'g'), ''));
         });
     }
     else{
         autofillText = ''
     }
-
   };
 
   return (
@@ -47,4 +45,4 @@ const EffectsDropdown = ({ setAutomatedPrompt }) => {
   );
 };
 
-export default EffectsDropdown;
+export default PaintingsDropdown;

@@ -17,7 +17,7 @@ import {
   import ErrorMessage from "./ErrorMessage";
   import ExpandableText from "./ExpandableText";
 import PhotographersDropdown from "./PhotographersDropdown";
-import ArtistsDropdown from "./ArtistsDropdown";
+import PaintingsDropdown from "./PaintingsDropdown";
 import TabItems from "./TabItems";
 import EffectsDropdown from "./EffectsDropdown";
 import CompositionsDropdown from "./CompositionsDropdown";
@@ -27,7 +27,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
   
     const [image, setImage] = useState(null);
     const [prompt, setPrompt] = useState("");
-    // const [automatedPrompt, setAutomatedPrompt] = useState("");
+    const [automatedPrompt, setAutomatedPrompt] = useState("");
     const [loadingImage, setLoadingImage] = useState(false);
     const [seed, setSeed] = useState(42);
     const [guidanceScale, setGuidanceScale] = useState(7.5);
@@ -37,7 +37,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
   
     const cleanFormData = () => {
       setPrompt("");
-    //   setAutomatedPrompt("");
+      setAutomatedPrompt("");
       setSeed(42);
       setGuidanceScale(7.5);
       setNumInfSteps(10);
@@ -60,7 +60,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
             num_inference_steps: numInfSteps,
             guidance_scale: guidanceScale,
             seed: seed,
-            prompt: prompt,
+            prompt: prompt + automatedPrompt,
         }),   
       };
       
@@ -83,7 +83,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
           const imageBlob = await response.blob();
           const imageObjectURL = URL.createObjectURL(imageBlob);
           setImage(imageObjectURL);
-          setPromptImage(prompt);
+          setPromptImage(prompt + automatedPrompt);
           cleanFormData();
       }
     }
@@ -130,7 +130,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
                         <div className="field">
                             <label className="label">Choose a photographer style</label>
                             {/* Button to trigger autofill */}
-                            <PhotographersDropdown setPrompt={setPrompt}/>
+                            <PhotographersDropdown setAutomatedPrompt={setAutomatedPrompt}/>
                         </div>
 
                         <br></br>
@@ -138,7 +138,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
                         <div className="field">
                             <label className="label">Choose a painting style</label>
                             {/* Button to trigger autofill */}
-                            <ArtistsDropdown setPrompt={setPrompt}/>
+                            <PaintingsDropdown setAutomatedPrompt={setAutomatedPrompt}/>
                         </div>
 
                         <br></br>
@@ -146,7 +146,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
                         <div className="field">
                             <label className="label">Choose an effect</label>
                             {/* Button to trigger autofill */}
-                            <EffectsDropdown setPrompt={setPrompt}/>
+                            <EffectsDropdown setAutomatedPrompt={setAutomatedPrompt}/>
                         </div>
 
                         <br></br>
@@ -154,7 +154,7 @@ import CompositionsDropdown from "./CompositionsDropdown";
                         <div className="field">
                             <label className="label">Choose a composition</label>
                             {/* Button to trigger autofill */}
-                            <CompositionsDropdown setPrompt={setPrompt}/>
+                            <CompositionsDropdown setAutomatedPrompt={setAutomatedPrompt}/>
                         </div>
 
                         <br></br>
@@ -162,8 +162,9 @@ import CompositionsDropdown from "./CompositionsDropdown";
                         <div className="field">
                             <label className="label">Automated Prompts</label>
                             <Textarea
-                               value={prompt}
-                               onChange={(e) => setPrompt(e.target.value)}
+                                isReadOnly 
+                               value={automatedPrompt}
+                               onChange={(e) => setAutomatedPrompt(e.target.value)}
                             ></Textarea>
                         </div>
 
