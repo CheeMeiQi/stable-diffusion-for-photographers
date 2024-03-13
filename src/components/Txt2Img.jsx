@@ -245,8 +245,8 @@ import CompositionsDropdown from "./CompositionsDropdown";
                     </form>
                 </GridItem>
 
-                <GridItem colSpan={2} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4} height="500px">
-                    <label className="label">Output</label>
+                <GridItem colSpan={2} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4} height="700px">
+                <Heading className="label" size="md">Output Image</Heading>
                     { image ? ( 
                             <Flex align="center" justify="center" height="100%" width="100%">
                                 <figure>

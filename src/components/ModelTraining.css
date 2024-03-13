@@ -8,12 +8,19 @@
     margin-left: "0" !important;
 }
 
-.uploadButton {
+.button {
     font-size: 18px;
     font-weight: 400 !important;
 }
 
-.trainButton {
-    font-size: 18px;
-    font-weight: 400 !important;
+.content-wrapper {
+    text-align: center;
 }
+
+.list-items {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 770px; /* Adjust as needed */
+}
+
