@@ -24,7 +24,8 @@ import {
   import './ModelTraining.css';
   import { loraAPI } from './loraAPI_novita';
   import { DateTime } from 'luxon';
-  import { FiCheckCircle } from 'react-icons/fi';
+  import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
+
 
 const ModelTraining = () => {
 
@@ -37,6 +38,8 @@ const ModelTraining = () => {
     // var trainTaskID = "";
     const [trainTaskID, updateTrainTaskID] = useState(null);
     const [modelID, updateModelID] = useState("");
+    const [trainingStatus, updateTrainingStatus] = useState("");
+    const [trainingButtonIsClicked, updateTrainingButtonIsClicked] = useState(false);
     var generateTaskID = null;
     // const [generateTaskID, updateGenerateTaskID] = useState(null);
     const [image, updateImage] = useState(null);
@@ -82,59 +85,85 @@ const ModelTraining = () => {
 
     // 1.1. Get image upoad URL
     // 1.2. Upload images
-    const handleUploadImages = (e) => {
-        const assetIDs = loraAPI.getAndUploadImage(uploadedImages);
+    const handleUploadImages = async (e) => {
+        const assetIDs = await loraAPI.getAndUploadImage(uploadedImages);
         updateAssetIDs(assetIDs);
     }
 
     // 2.1. Start training task and configure parameters
-    const handleTraining = (e) => {
+    const handleTraining = async (e) => {
+        updateTrainingButtonIsClicked(true);
         e.preventDefault();
-        const userModelName = `test_${Math.floor(Math.random() * (100 - 1 + 1)) + 1}`;
-        const classPrompt = "Person";
-        const trainTaskID = loraAPI.trainLora(userModelName, assetIDs, uploadedImages, instancePrompt, classPrompt);
+        // await handleUploadImages(e); // Wait for assetIDs to be updated
+        const userModelName = `test_${Math.floor(Math.random() * (100000 - 1 + 1)) + 1}`;
+        const classPrompt = "person";
+        const trainTaskID = await loraAPI.trainLora(userModelName, assetIDs, uploadedImages, instancePrompt, classPrompt);
+        console.log(`trainTaskID: ${trainTaskID}`);
         updateTrainTaskID(trainTaskID); 
-        handleTrainingStatus();
       }
 
+    useEffect(() => {
+        if (trainingButtonIsClicked && trainTaskID != null){
+            handleTrainingStatus(); // This will be executed when the state changes
+            updateTrainingButtonIsClicked(false);
+        }
+    }, [trainingButtonIsClicked, trainTaskID]);
+
     // 3.1. Get model training and deployment status
-    const handleTrainingStatus = (e) => {
+    const handleTrainingStatus = async (e) => {
         // counter =  counter + 1;
         updateLoadingModel(true);
-        const modelID =  loraAPI.getModelStatus(trainTaskID);
-        updateModelID(modelID);
-        if (modelID !== "") {
-            updateLoadingModel(false);
+        console.log(`trainTaskID in getModelStatus: ${trainTaskID}`);
+        const statusResponse = await loraAPI.getModelStatus(trainTaskID);
+        console.log(`statusResponse: ${statusResponse}`);
+        if (statusResponse['task_status'] === "SUCCESS"){
+            updateTrainingStatus("SUCCESS");
+            const modelID = statusResponse['model_name']
+            updateModelID(modelID);
+        } else if (statusResponse['task_status'] === "FAILED"){
+            updateTrainingStatus("FAILED");
+            const modelID = "";
+            updateModelID(modelID);
+        } else { //unknown or cancelled
+            updateTrainingStatus(statusResponse['task_status']);
+            const modelID = "";
+            updateModelID(modelID);
         }
     }
 
     useEffect(() => {
-        const intervalId = setInterval(handleTrainingStatus, 10000);
-
-        // Clear interval when model ID is available
-        if (!loadingModel) {
-            clearInterval(intervalId);
+        if (trainingStatus !== "") {
+            updateLoadingModel(false);
         }
+    }, [trainingStatus]);
 
-        return () => clearInterval(intervalId);
-    }, [loadingModel, trainTaskID]);
+    // useEffect(() => {
+    //     const intervalId = setInterval(handleTrainingStatus, 1000);
+
+    //     // Clear interval when model ID is available
+    //     if (!loadingModel) {
+    //         clearInterval(intervalId);
+    //     }
+
+    //     return () => clearInterval(intervalId);
+    // }, [loadingModel]);
 
 
     // 4.1. Get model name from user
     // 4.2. Start using the trained model
 
-    const handleGenerating = (e) => {
+    const handleGenerating = async(e) => {
         e.preventDefault();
         updateLoadingImage(true);
         updatePrompt(prompt);
-        generateTaskID = loraAPI.generateImagewithTrainedLora(modelID, prompt);
+        generateTaskID = await loraAPI.generateImagewithTrainedLora(modelID, prompt);
         // updateGenerateTaskID(generateTaskID);
-        handleGetImage();
+        await handleGetImage();
       }
 
-    const handleGetImage = (e) => {
-        const imageURL = loraAPI.getImage(generateTaskID);
-        const image = loraAPI.openImage(imageURL);
+    const handleGetImage = async (e) => {
+        const imageURL = await loraAPI.getImage(generateTaskID);
+        const image = await loraAPI.openImage(imageURL);
         updateImage(image);
         current_datetime = DateTime.now().toISO();
         const save_path = `../../backend/images/${modelID}_${current_datetime}.png`;
@@ -278,13 +307,30 @@ const ModelTraining = () => {
                      <Text mt={5}>Please wait while your model is generating...</Text>
                  </Flex>
                 ) : (
-                    modelID && ( 
-                        <Flex align="center" justify="center">
-                            <FiCheckCircle style={{ color: 'green', fontSize: '24px', marginRight: "5px"}} /> 
-                            <Text>Your model has been generated successfully! Model ID: 
-                            <Text as="span" fontWeight="bold"> {modelID}</Text></Text>
+                    <>
+                        {trainingStatus === "SUCCESS" && (
+                            <Flex align="center" justify="center">
+                                <FiCheckCircle style={{ color: 'green', fontSize: '24px', marginRight: "5px"}} /> 
+                                <Text>Your model has been generated successfully! Model ID: 
+                                    <Text as="span" fontWeight="bold"> {modelID}</Text>
+                                </Text>
+                            </Flex>
+                        )}
+                
+                        {trainingStatus === "FAILED" && (
+                            <Flex align="center" justify="center">
+                                <FiXCircle style={{ color: 'red', fontSize: '24px', marginRight: "5px"}} /> 
+                                <Text>Model generation failed. Please try again later.</Text>
+                            </Flex>
+                        )}
+                
+                        {["QUEUING", "TRAINING"].includes(trainingStatus) && (
+                            <Flex align="center" justify="center" height="100%" direction="column">
+                            <CircularProgress isIndeterminate color='orange' size="120px"thickness="12px"/>
+                            <Text mt={5}>Please wait while your model is generating...</Text>
                         </Flex>
-                    )
+                        )}
+                    </>
                 )}
                 {/* <Button className="button" colorScheme={"orange"} onClick={handleTrainingStatus}>Get training status</Button> */}
             </div>
@@ -309,7 +355,7 @@ const ModelTraining = () => {
                             type="text"
                             placeholder="Enter model ID"
                             value={modelID}
-                            onChange={(e) => updateModelID.modelID(e.target.value)}
+                            onChange={(e) => updateModelID(e.target.value)}
                             height="50px"
                             width="500px"
                             marginLeft="10px"
