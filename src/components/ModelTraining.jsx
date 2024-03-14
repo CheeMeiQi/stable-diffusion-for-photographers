@@ -37,13 +37,13 @@ const ModelTraining = () => {
     // var trainTaskID = "";
     const [trainTaskID, updateTrainTaskID] = useState(null);
     const [modelID, updateModelID] = useState("");
-    var generateTaskID = "";
+    var generateTaskID = null;
     // const [generateTaskID, updateGenerateTaskID] = useState(null);
     const [image, updateImage] = useState(null);
     const [loadingImage, updateLoadingImage] = useState(false);
     const [loadingModel, updateLoadingModel] = useState(false);
     var current_datetime = "";
-    var counter = 0;
+    // var counter = 0;
 
     // Function to retrieve files from the specified directory
     const retrieveFiles = () => {
@@ -83,7 +83,7 @@ const ModelTraining = () => {
     // 1.1. Get image upoad URL
     // 1.2. Upload images
     const handleUploadImages = (e) => {
-        const assetIDs = loraAPI.getAndUploadImage(filePath, uploadedImages);
+        const assetIDs = loraAPI.getAndUploadImage(uploadedImages);
         updateAssetIDs(assetIDs);
     }
 
@@ -99,9 +99,9 @@ const ModelTraining = () => {
 
     // 3.1. Get model training and deployment status
     const handleTrainingStatus = (e) => {
-        counter =  counter + 1;
+        // counter =  counter + 1;
         updateLoadingModel(true);
-        const modelID =  loraAPI.getModelStatus(trainTaskID, counter);
+        const modelID =  loraAPI.getModelStatus(trainTaskID);
         updateModelID(modelID);
         if (modelID !== "") {
             updateLoadingModel(false);
@@ -133,13 +133,12 @@ const ModelTraining = () => {
       }
 
     const handleGetImage = (e) => {
-        // e.preventDefault();
         const imageURL = loraAPI.getImage(generateTaskID);
         const image = loraAPI.openImage(imageURL);
         updateImage(image);
         current_datetime = DateTime.now().toISO();
-        // const save_path = `./images/${modelID}_${current_datetime}.png`;
-        // image.save(save_path);
+        const save_path = `../../backend/images/${modelID}_${current_datetime}.png`;
+        image.save(save_path);
         console.log(`image saved. ${current_datetime}`);
         updateLoadingImage(false);
     }
@@ -162,7 +161,9 @@ const ModelTraining = () => {
                 <Heading size="lg" marginTop="10px">1. Upload 10 Example Images</Heading>
                 <br></br>
                 <List spacing={3} className="list-items">
-                    <ListItem>a. Crop your images to 512px by 512px 
+                    <ListItem>a. Prepare 10 images in png, jpeg or webp format.
+                    </ListItem>
+                    <ListItem>b. Crop your images to 512px by 512px 
                             with the main subject in the center of the images.
                     </ListItem>
                     {/* <div>
@@ -173,8 +174,8 @@ const ModelTraining = () => {
                             <option value="webp">webp</option>
                         </Select>
                     </div> */}
-                    <ListItem>b. Save all 10 images in the same folder in your work station.</ListItem>
-                    <ListItem>c. Choose your folder below to retrieve your images and insert captions.</ListItem>
+                    <ListItem>c. Save all 10 images in the same folder in your work station.</ListItem>
+                    <ListItem>d. Choose your folder below to retrieve your images and insert captions.</ListItem>
 
                     <div className="file-path">
                     <label className="label">File Path</label>
