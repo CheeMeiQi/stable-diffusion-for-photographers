@@ -154,7 +154,7 @@ def getModelStatus(trainTaskID: str = Form(...)):
                 task_status = response_data['task_status']
                 if task_status == "SUCCESS":
                     print(f"SUCCESS: TRAINING-LORA:\n {response_data}")
-                    model_name = response_data['models']['model_name']
+                    model_name = response_data['models'][0]['model_name']
                     return { 'task_status': task_status, 'model_name': model_name }
                 elif task_status in ["QUEUING", "TRAINING"]:
                     time.sleep(5)  # Add a delay before checking again
@@ -194,13 +194,13 @@ def generateImagewithTrainedLora(modelID: str = Form(...), prompt: str = Form(..
     }
 
     try:
-        response = requests.post(url, header=headers, data=payload)
-        print(response.text)
+        response = requests.post(url, headers=headers, data=payload)
+        # print(response.text)
         response_data = response.json()    
 
         if response.status_code == 200:
             print(f'SUCCESS: GENERATE-IMAGE-WITH-LORA:\n {response_data}')
-            task_id = responseData['task_id']
+            task_id = response_data['data']['task_id']
             return {'task_id': task_id}
         else:
             print(f'ERROR: GENERATE-IMAGE-WITH-LORA:\n {response_data}')
@@ -213,24 +213,26 @@ def generateImagewithTrainedLora(modelID: str = Form(...), prompt: str = Form(..
 @app.post("/api/getImage/")
 def getImage(generateTaskID: str = Form(...)):
 
-        url = f"https://api.novita.ai/v2/progress?task_id={generateTaskID}"
-        headers = { 'Authorization': 'Bearer ' + loraAPIkey_novita }
-        payload = {}
 
-        try:
-            response = requests.get(headers= headers, data=payload)
-            print(response.text)
-            response_data = response.json()  
+    url = f"https://api.novita.ai/v2/progress"
+    params = {'task_id': generateTaskID }
+    headers = { 'Authorization': 'Bearer ' + loraAPIkey_novita }
+    payload = {}
 
-            if response.ok:
-                print(f"SUCCESS: GET-IMAGE:\n {response_data}")
-                image_url = responseData["image_url"]
-                return {'image_url: ': image_url}
-            else:
-                print(f"ERROR: GET-IMAGE:\n {response_data}")
-                return {'image_url: ': None}
+    try:
+        response = requests.get(url, headers= headers,  params=params)
+        # print(response.text)
+        response_data = response.json()  
 
-        except Exception as e:
-            traceback.print_exc() 
-            print(f"ERROR:GET-IMAGE:\n {e}")   
+        if response.ok:
+            print(f"SUCCESS: GET-IMAGE:\n {response_data}")
+            image_url = response_data["imgs"][0]
+            return {'image_url: ': image_url}
+        else:
+            print(f"ERROR: GET-IMAGE:\n {response_data}")
+            return {'image_url: ': None}
+
+    except Exception as e:
+        traceback.print_exc() 
+        print(f"ERROR:GET-IMAGE:\n {e}")   
             
