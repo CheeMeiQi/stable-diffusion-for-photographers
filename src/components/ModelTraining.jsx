@@ -162,13 +162,14 @@ const ModelTraining = () => {
       }
 
     const handleGetImage = async (e) => {
+        console.log(`generate task id: ${generateTaskID}`);
         const imageURL = await loraAPI.getImage(generateTaskID);
         const image = await loraAPI.openImage(imageURL);
-        updateImage(image);
-        current_datetime = DateTime.now().toISO();
-        const save_path = `../../backend/images/${modelID}_${current_datetime}.png`;
-        image.save(save_path);
-        console.log(`image saved. ${current_datetime}`);
+        updateImage(URL.createObjectURL(image));
+        // current_datetime = DateTime.now().toISO();
+        // const save_path = `../../backend/images/${modelID}_${current_datetime}.png`;
+        // image.save(save_path);
+        // console.log(`image saved. ${current_datetime}`);
         updateLoadingImage(false);
     }
 
@@ -398,10 +399,9 @@ const ModelTraining = () => {
             <Heading className="label" size="lg" margin="5px">Output Image</Heading>
                     { image ? ( 
                             <Flex align="center" justify="center" height="100%" width="100%">
-                                <Text>Image is saved to ./images/{modelID}_{current_datetime}.png</Text>
                                 <figure>
                                     <img src={image} alt="genimage" className="genImage"/>
-                                    <figcaption style={{ textAlign: "center", marginTop: "5px"}}>{promptImage}</figcaption>
+                                    <figcaption style={{ textAlign: "center", marginTop: "5px"}}>{prompt}</figcaption>
                                 </figure>
                             </Flex>
                             ) 

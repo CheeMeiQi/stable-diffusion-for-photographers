@@ -31,7 +31,7 @@ export const loraAPI = {
             }
         } catch (error) {
             console.log('Error uploading images:', error);
-        }
+        } 
         return assetIDs;
     },
 
@@ -152,6 +152,13 @@ export const loraAPI = {
 
         try {
             const generateTaskID = await generateTaskIDPromise;
+            console.log(`generate task_id: ${generateTaskID}`);
+
+            // const url = `https://api.novita.ai/v2/progress?task_id=${generateTaskID}`;
+            // const params = {'task_id': generateTaskID };
+            // console.log(`params: ${JSON.stringify(params)}`);
+            // const headers = { 'Authorization': 'Bearer ' + loraAPIkey_novita };
+            
             const formData = new FormData();
             formData.append('generateTaskID', generateTaskID);
 
@@ -159,9 +166,11 @@ export const loraAPI = {
                 method: 'POST',
                 body: formData
             });
+            // const response = await fetch(url, {method: 'GET', headers: headers});
 
             const responseText = await response.text();
             const responseJson = JSON.parse(responseText);
+            console.log(`get image: ${JSON.stringify(responseJson)}`);
 
             if (response.ok) {   
                 console.log(`Get image url:\n ${responseJson['image_url']}`);
@@ -170,6 +179,7 @@ export const loraAPI = {
                 console.error(`Error generating image with trained lora:\n ${responseText}`);
                 return null;
             }
+
         } catch (error) {
             console.log('Error getting image url:', error);
             // console.trace();
