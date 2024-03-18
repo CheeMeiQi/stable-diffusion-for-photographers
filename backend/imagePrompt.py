@@ -3,7 +3,7 @@ from typing import Optional
 
 class _PromptBase(_pydantic.BaseModel):
     seed: Optional[int] = 42
-    num_inference_steps: int = 10
+    num_inference_steps: int = 20
     guidance_scale: float = 7.5
 
 class ImageCreate(_PromptBase):

@@ -23,18 +23,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# @app.post("/api/generate/")
-# async def generate_image(request: _imagePrompt.ImageCreate):
+@app.post("/api/generate/")
+async def generate_image(request: _imagePrompt.ImageCreate):
     
-#     image = await _txt2imgAPI.generate_image(imgPrompt=request)
-#     file_name = f"{request.prompt}_seed_{request.seed}_guidance_{request.guidance_scale}_steps_{request.num_inference_steps}.png"
-#     image.save(f"./images/{file_name}")
-#     buffer = BytesIO()
-#     image.save(buffer, format="PNG")
-#     buffer.seek(0)
-#     #imgstr = base64.b64encode(buffer.getvalue())
+    image = await _txt2imgAPI.generate_image(imgPrompt=request)
+    file_name = f"{request.prompt}_seed_{request.seed}_guidance_{request.guidance_scale}_steps_{request.num_inference_steps}.png"
+    image.save(f"./images/{file_name}")
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    buffer.seek(0)
+    #imgstr = base64.b64encode(buffer.getvalue())
     
-#     return StreamingResponse(buffer, media_type="image/png")
+    return StreamingResponse(buffer, media_type="image/png")
 
 @app.post("/api/getAndUploadImages/")
 async def getAndUploadImage(file: UploadFile = File(...)):

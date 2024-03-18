@@ -1,4 +1,4 @@
-import { loraAPIkey_novita } from  "./auth_token.js";
+
 
 export const loraAPI = {
     
@@ -152,7 +152,7 @@ export const loraAPI = {
 
         try {
             const generateTaskID = await generateTaskIDPromise;
-            console.log(`generate task_id: ${generateTaskID}`);
+            // console.log(`generate task_id: ${generateTaskID}`);
 
             // const url = `https://api.novita.ai/v2/progress?task_id=${generateTaskID}`;
             // const params = {'task_id': generateTaskID };
@@ -170,7 +170,7 @@ export const loraAPI = {
 
             const responseText = await response.text();
             const responseJson = JSON.parse(responseText);
-            console.log(`get image: ${JSON.stringify(responseJson)}`);
+            // console.log(`get image: ${JSON.stringify(responseJson)}`);
 
             if (response.ok) {   
                 console.log(`Get image url:\n ${responseJson['image_url']}`);

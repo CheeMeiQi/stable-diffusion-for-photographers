@@ -98,7 +98,7 @@ const ModelTraining = () => {
         const userModelName = `test_${Math.floor(Math.random() * (100000 - 1 + 1)) + 1}`;
         const classPrompt = "person";
         const trainTaskID = await loraAPI.trainLora(userModelName, assetIDs, uploadedImages, instancePrompt, classPrompt);
-        console.log(`trainTaskID: ${trainTaskID}`);
+        // console.log(`trainTaskID: ${trainTaskID}`);
         updateTrainTaskID(trainTaskID); 
       }
 
@@ -113,9 +113,9 @@ const ModelTraining = () => {
     const handleTrainingStatus = async (e) => {
         // counter =  counter + 1;
         updateLoadingModel(true);
-        console.log(`trainTaskID in getModelStatus: ${trainTaskID}`);
+        // console.log(`trainTaskID in getModelStatus: ${trainTaskID}`);
         const statusResponse = await loraAPI.getModelStatus(trainTaskID);
-        console.log(`statusResponse: ${statusResponse}`);
+        // console.log(`statusResponse: ${statusResponse}`);
         if (statusResponse['task_status'] === "SUCCESS"){
             updateTrainingStatus("SUCCESS");
             const modelID = statusResponse['model_name']
@@ -162,7 +162,7 @@ const ModelTraining = () => {
       }
 
     const handleGetImage = async (e) => {
-        console.log(`generate task id: ${generateTaskID}`);
+        // console.log(`generate task id: ${generateTaskID}`);
         const imageURL = await loraAPI.getImage(generateTaskID);
         const image = await loraAPI.openImage(imageURL);
         updateImage(URL.createObjectURL(image));
@@ -178,7 +178,7 @@ const ModelTraining = () => {
         <ChakraProvider>
 
         <Heading className="heading" size="xl">LoRA Training</Heading>
-        <Text marginLeft={"220px"} marginRight={"220px"} fontSize={"18px"}>
+        <Text marginLeft={"17%"} marginRight={"17%"} fontSize={"18px"}>
             <Link href={"https://huggingface.co/blog/lora"} color={"blue"}> What is a LoRA? </Link>
         LoRA (Low-Rank Adaptation) is a training technique for fine-tuning Stable Diffusion models. They are much smaller than checkpoint models. Train LoRA models to adapt your artwork subjects or styles!
             
@@ -191,9 +191,9 @@ const ModelTraining = () => {
                 <Heading size="lg" marginTop="10px">1. Upload 10 Example Images</Heading>
                 <br></br>
                 <List spacing={3} className="list-items">
-                    <ListItem>a. Prepare 10 images in png, jpeg or webp format.
+                    <ListItem>a. Prepare 10 images in <Text as="span" fontWeight="bold">png, jpeg or webp</Text> format.
                     </ListItem>
-                    <ListItem>b. Crop your images to 512px by 512px 
+                    <ListItem>b. Crop your images to <Text as="span" fontWeight="bold">512px by 512px </Text> 
                             with the main subject in the center of the images.
                     </ListItem>
                     {/* <div>
@@ -204,8 +204,8 @@ const ModelTraining = () => {
                             <option value="webp">webp</option>
                         </Select>
                     </div> */}
-                    <ListItem>c. Save all 10 images in the same folder in your work station.</ListItem>
-                    <ListItem>d. Choose your folder below to retrieve your images and insert captions.</ListItem>
+                    <ListItem>c. <Text as="span" fontWeight="bold">Save all 10 images in the same folder</Text> in your work station.</ListItem>
+                    <ListItem>d. Choose your folder below to <Text as="span" fontWeight="bold">retrieve your images</Text> and <Text as="span" fontWeight="bold">insert captions</Text>.</ListItem>
 
                     <div className="file-path">
                     <label className="label">File Path</label>
@@ -369,7 +369,7 @@ const ModelTraining = () => {
                 <div>
                     <label className="label">Prompt</label>
                     <Textarea
-                        placeholder="Enter prompt to generate image e.g., Eiffel Tower"
+                        placeholder="Enter prompt to generate image e.g., Marina Bay Sands"
                         value={prompt}
                         onChange={(e) => updatePrompt(e.target.value)}
                         height="110px"

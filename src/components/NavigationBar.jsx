@@ -18,7 +18,7 @@ class NavigationBar extends Component {
                             Stable Diffusion for Photographers</Navbar.Brand>
                             <Nav className="me-auto">
                                 <Nav.Link as={NavLink} to="/txt2img" className="navbar-route">Text-to-Image Generation</Nav.Link>
-                                <Nav.Link as={NavLink} to="/modelTraining" className='navbar-route'>Train a Model</Nav.Link>
+                                <Nav.Link as={NavLink} to="/modelTraining" className='navbar-route'>Train a LoRA Model</Nav.Link>
                             </Nav>
                     </Navbar>
                     <Routes>
