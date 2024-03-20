@@ -10,12 +10,12 @@ const Home = () => {
                     backgroundImage="url('/sdBackground.jpg')" // Adjust the path to your image
                     backgroundSize="cover"
                     backgroundPosition="center"
-                    minHeight="100vh"
+                    // minHeight="100vh"
                     backgroundColor="rgba(255, 255, 255, 0.9)"
                     position="relative"
                 >
-                {/* <Heading> Put the power of AI in the hands of photographers, transforming the way you create and explore visual possibilities. Let's get started!</Heading> */}
-                <Flex justify="center" align="center" height="100vh">
+                {/* <Heading></Heading> */}
+                <Flex justify="center" align="center">
                 <Link href="/Txt2Img" _hover={{ textDecoration: 'none' }}>
                     <Box
                     maxW="sm"

@@ -12,7 +12,7 @@ export const loraAPI = {
                 // formData.append('caption', uploadedImages[i].caption);
                 formData.append('file', uploadedImages[i].file);
                 
-                const response = await fetch('http://localhost:8000/api/getAndUploadImages/', {
+                const response = await fetch('http://localhost:8001/api/getAndUploadImages/', {
                     method: 'POST',
                     body: formData
                 });
@@ -51,7 +51,7 @@ export const loraAPI = {
             formData.append('instancePrompt', instancePrompt);
             formData.append('classPrompt', classPrompt);
 
-            const response = await fetch('http://localhost:8000/api/trainLora/', {
+            const response = await fetch('http://localhost:8001/api/trainLora/', {
                 method: 'POST',
                 body: formData
             });
@@ -82,7 +82,7 @@ export const loraAPI = {
             const formData = new FormData();
             formData.append('trainTaskID', trainTaskID);
 
-            const response = await fetch('http://localhost:8000/api/getModelStatus/', {
+            const response = await fetch('http://localhost:8001/api/getModelStatus/', {
                 method: 'POST',
                 body: formData
             });
@@ -125,7 +125,7 @@ export const loraAPI = {
             formData.append('modelID', modelID);
             formData.append('prompt', prompt);
 
-            const response = await fetch('http://localhost:8000/api/generateImagewithTrainedLora/', {
+            const response = await fetch('http://localhost:8001/api/generateImagewithTrainedLora/', {
                 method: 'POST',
                 body: formData
             });
@@ -162,7 +162,7 @@ export const loraAPI = {
             const formData = new FormData();
             formData.append('generateTaskID', generateTaskID);
 
-            const response = await fetch('http://localhost:8000/api/getImage/', {
+            const response = await fetch('http://localhost:8001/api/getImage/', {
                 method: 'POST',
                 body: formData
             });

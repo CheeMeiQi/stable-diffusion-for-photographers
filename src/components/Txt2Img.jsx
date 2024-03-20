@@ -71,7 +71,7 @@ import { MdChatBubbleOutline, MdKeyboard } from 'react-icons/md';
       setLoadingImage(true);
       console.log("setLoadingImage is set to true.");
   
-      const response = await fetch("http://localhost:8000/api/generate/", requestOptions);
+      const response = await fetch("http://localhost:8001/api/generate/", requestOptions);
       
     //   if (!response.ok){
     //     //   setErrorMessage("Ooops! Something went wrong generating the image");
@@ -110,7 +110,7 @@ import { MdChatBubbleOutline, MdKeyboard } from 'react-icons/md';
     return (
         <ChakraProvider>
             <Heading className="heading">Text-to-Image Generation</Heading>
-            <Text marginLeft={"17%"} marginRight={"17%"} marginBottom={"10px"} fontSize={"18px"}>
+            <Text marginLeft={"15%"} marginRight={"15%"} marginBottom={"10px"} fontSize={"18px"}>
             Simply describe your desired image in words and Stable Diffusion model takes your text prompt to generate an original image that matches your description. The model can be found in this {" "}
                 <Link href={"https://github.com/runwayml/stable-diffusion"} color={"blue"}> Github Repository.</Link>
             </Text>

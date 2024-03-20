@@ -649,20 +649,6 @@ const TabItems = () => {
               </Box>
             </Box>
             <Box position="relative">
-              <Image src="/LongExposure.jpg" alt="LongExposure"/>
-                <Box
-                  position="absolute"
-                  bottom="4"
-                  right="4"
-                  bg="blackAlpha.700"
-                  color="white"
-                  p="2"
-                  borderRadius="md"
-                >
-                  Long Exposure
-              </Box>
-            </Box>
-            <Box position="relative">
               <Image src="/Scribble.jpg" alt="Scribble"/>
                 <Box
                   position="absolute"
