@@ -178,7 +178,7 @@ const ModelTraining = () => {
         <ChakraProvider>
 
         <Heading className="heading" size="xl">LoRA Training</Heading>
-        <Text marginLeft={"17%"} marginRight={"17%"} fontSize={"18px"}>
+        <Text marginLeft={"15%"} marginRight={"15%"} fontSize={"18px"}>
             <Link href={"https://huggingface.co/blog/lora"} color={"blue"}> What is a LoRA? </Link>
         LoRA (Low-Rank Adaptation) is a training technique for fine-tuning Stable Diffusion models. They are much smaller than checkpoint models. Train LoRA models to adapt your artwork subjects or styles!
             
