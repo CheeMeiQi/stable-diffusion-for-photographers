@@ -393,9 +393,6 @@ const ModelTraining = () => {
             </GridItem>
             {/* Right Column */}
             <GridItem colSpan={1} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4}>
-                <div style={{textAlign: "center"}}>
-
-                
             <Heading className="label" size="lg" margin="5px">Output Image</Heading>
                     { image ? ( 
                             <Flex align="center" justify="center" height="100%" width="100%">
@@ -409,12 +406,11 @@ const ModelTraining = () => {
                         } 
                          { loadingImage ? (
                                 <Flex align="center" justify="center" height="100%" direction="column">
-                                    <CircularProgress isIndeterminate color='orange' size="120px"thickness="12px"/>
+                                    <CircularProgress isIndeterminate color='orange' size="120px" thickness="12px"/>
                                     <Text mt={5}>Please wait while your image is generating...</Text>
                                 </Flex>
                             ) : <></>
                         }         
-                        </div>
             </GridItem>
         </Grid>
     </ChakraProvider>

@@ -13,6 +13,7 @@ import requests
 import json
 import traceback
 import time
+from datetime import datetime
 
 app = FastAPI()
 app.add_middleware(
@@ -27,7 +28,12 @@ app.add_middleware(
 async def generate_image(request: _imagePrompt.ImageCreate):
     
     image = await _txt2imgAPI.generate_image(imgPrompt=request)
-    file_name = f"{request.prompt}_seed_{request.seed}_guidance_{request.guidance_scale}_steps_{request.num_inference_steps}.png"
+    # file_name = f"{request.prompt}_seed_{request.seed}_guidance_{request.guidance_scale}_steps_{request.num_inference_steps}.png"
+
+    current_datetime = datetime.now()
+    formatted_datetime = current_datetime.strftime("%Y-%m-%d_%H-%M-%S")
+    file_name = f"{formatted_datetime}.png"
+
     image.save(f"./images/{file_name}")
     buffer = BytesIO()
     image.save(buffer, format="PNG")

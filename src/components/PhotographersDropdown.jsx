@@ -15,7 +15,7 @@ const PhotographersDropdown = ({ setAutomatedPrompt }) => {
       ', Dorothea Lange style, large-format camera, natural lighting, realism, documentary photography, 1936 Depression era, post-war years',
       ', Michael Kenna style, contemporary landscape photography, black and white, serene, minimalist compositions, long exposures, tonal contrast, Kodachrome',
       ', Eliot Porter style, colourful nature photography, forest in the autumn, Kodak box camera, detailed, exquiste colour images of birds',
-      ', David Noton style, letterbox-format paranomic landscape, scenic view, colourful, HD, high quality',
+      ', David Norton style, letterbox-format paranomic landscape, scenic view, colourful, HD, high quality',
       ', Charlie Waite style, award winning landscape photography, spiritual quality of serenity and calm, tranquility',
       ', Edward Burtynsky style, industrial landscapes, 4K, mine tailings, quarries, scrap piles, depicting consequences of global consumerism, large-format camera'
     ];

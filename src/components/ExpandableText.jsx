@@ -24,7 +24,7 @@ const ExpandableText = ({ fullText }) => {
             padding="0"
             fontSize="16px"
             fontWeight="normal"
-            leftIcon={isExpanded ? <ChevronUpIcon marginRight="-7"/> : <ChevronDownIcon marginRight="-7"/>}
+            leftIcon={isExpanded ? <ChevronUpIcon marginRight="-2"/> : <ChevronDownIcon marginRight="-2"/>}
             
         >
             {isExpanded ? 'Show less' : 'Read more'}

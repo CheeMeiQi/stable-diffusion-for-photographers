@@ -296,15 +296,17 @@ import { MdChatBubbleOutline, MdKeyboard } from 'react-icons/md';
                     </form>
                 </GridItem>
 
-                <GridItem colSpan={2} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4} height="700px">
+                <GridItem colSpan={2} boxShadow="0 4px 15px rgba(0, 0, 0, 0.7)" p={4} height="680px">
                 <Heading className="label" size="lg">Output Image</Heading>
+                <br />
                     { image ? ( 
-                            <Flex align="center" justify="center" height="100%" width="100%">
-                                <figure>
-                                    <img src={image} alt="genimage" className="genImage"/>
-                                    <figcaption style={{ textAlign: "center", marginTop: "5px"}}>{promptImage}</figcaption>
-                                </figure>
-                            </Flex>
+                            <div >
+                              <Flex align="center" justify="center" height="100%">
+                                  <img src={image} alt="genimage"/>
+                              </Flex>
+                              <figcaption style={{ textAlign: "center", marginTop: "5px"}}>{promptImage}</figcaption>
+                            </div>
+                            
                             ) 
                                 : <></>
                         }
