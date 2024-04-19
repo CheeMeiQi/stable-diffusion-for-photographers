@@ -1,0 +1,1 @@
+loraAPIkey_novita = ""
