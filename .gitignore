@@ -32,7 +32,6 @@ backend/auth_token.py
 src/components/auth_token.js
 
 # misc
-backend/images/
 node_modules/
 diffusers/
 
