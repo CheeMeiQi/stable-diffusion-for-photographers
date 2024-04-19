@@ -28,8 +28,8 @@ stable-diffusion2/
 stable-diffusion/
 
 # token 
-# backend/auth_token.py
-# src/components/auth_token.js
+backend/auth_token.py
+src/components/auth_token.js
 
 # misc
 node_modules/
