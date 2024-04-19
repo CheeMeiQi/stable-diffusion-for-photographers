@@ -7,4 +7,4 @@ The main purpose of this project is to provide a platform where landscape photog
 ## Features:
 
 - Text-to-Image Generation
-- Train a Model (LoRA)
+- Train a Model (KIV: LoRA, Dreambooth, Hypernetwork)
